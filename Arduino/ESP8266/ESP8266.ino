@@ -1,4 +1,5 @@
 #include <ESP8266WiFi.h>
+#include <PubSubClient.h>
 
 /*
    Structs
@@ -25,11 +26,13 @@ MonitoringValues mv;
 ControlValues cv;
 
 WiFiClient client;
+PubSubClient pubSubClient(client);
 
 const char* ssid     = "VINICIUS";
 const char* password = "25071997";
-const char* host = "192.168.0.10";
-const int httpPort = 30000;
+const char* mqtt_server = "192.168.0.18";//servidor interno MQTT
+const char* mqtt_user = "embarcados";
+const char* mqtt_pass = "embarcados";
 
 void setup() {
   Serial.begin(115200);
@@ -54,11 +57,49 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   /*
-     Connect to server
+     Connect mqtt broker
   */
-  if (!client.connect(host, httpPort)) {
-    Serial.println("connection failed");
-    return;
+  pubSubClient.setServer(mqtt_server, 1883);
+  pubSubClient.setCallback(callback);
+
+  cv.servoDirection[0] = '0';
+  cv.servoDirection[1] = '\0';
+  cv.LEDColor[0] = '0';
+  cv.LEDColor[1] = '\0';
+  cv.LEDDirection[0] = '0';
+  cv.LEDDirection[1] = '\0';
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  if (strcmp(topic, "servo-direction") == 0)
+  {
+    cv.servoDirection[0] = payload[0];
+    Serial.write((char*)&cv, sizeof(cv));
+  }
+  else if (strcmp(topic, "led-color") == 0)
+  {
+    cv.LEDColor[0] = payload[0];
+    Serial.write((char*)&cv, sizeof(cv));
+  }
+  else if (strcmp(topic, "led-direction") == 0)
+  {
+    cv.LEDDirection[0] = payload[0];
+    Serial.write((char*)&cv, sizeof(cv));
+  }
+}
+
+void reconnect() {
+  // Loop until we're reconnected
+  while (!pubSubClient.connected()) {
+    // Attempt to connect
+    if (pubSubClient.connect("ESP8266", mqtt_user, mqtt_pass)) {
+      pubSubClient.subscribe("servo-direction");
+      pubSubClient.subscribe("led-color");
+      pubSubClient.subscribe("led-direction");
+    } else {
+      // Wait 1 seconds before retrying
+      delay(1000);
+    }
   }
 }
 
@@ -66,15 +107,13 @@ void loop() {
   delay(100);
 
   /*
-     If got disconnected, try stablish connection again
+       If got MQTT disconnected, try stablish connection again
   */
-  if (!client.connected())
-  {
-    if (!client.connect(host, httpPort)) {
-      Serial.println("connection failed");
-      return;
-    }
+  if (!pubSubClient.connected()) {
+    reconnect();
   }
+
+  pubSubClient.loop();
 
   /*
      Read values from serial and send to server
@@ -82,15 +121,9 @@ void loop() {
   if (Serial.available())
   {
     Serial.readBytesUntil('-', (char*)&mv, sizeof mv);
-    client.write((char*)&mv, sizeof mv);
+    pubSubClient.publish("pressure", mv.P);
+    pubSubClient.publish("temperature", mv.T);
+    pubSubClient.publish("humidity", mv.H);
+    pubSubClient.publish("distance", mv.D);
   }
-
-  /*
-     Read values from client and send to serial
-  */
-  if (client.available())
-  {
-    client.readBytesUntil('-', (char*)&cv, sizeof cv);
-    Serial.write((char*)&cv, sizeof cv);
-  }    
 }

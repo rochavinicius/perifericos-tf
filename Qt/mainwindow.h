@@ -2,30 +2,19 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QNetworkInterface>
-#include <thread>
+#include <QHostAddress>
 #include <iostream>
+#include <qmqtt.h>
+#include <chrono>
+
+#ifdef QT_NO_SSL
+#undef QT_NO_SSL
+#endif
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
-
-struct MonitoringValues {
-  char P[10];
-  char T[10];
-  char H[10];
-  char D[5];
-  char flag = '-';
-};
-
-struct ControlValues {
-  char servoDirection[2];
-  char LEDColor[2];
-  char LEDDirection[2];
-  char flag = '-';
-};
 
 class MainWindow : public QMainWindow
 {
@@ -35,22 +24,39 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void NewConnection();
-    void ReadMonitoringValues();
-    void SendControlValues();
     void UpdateStatus();
+
+    void SubscribeClient(std::unique_ptr<QMQTT::Client> &client, bool isLocal);
+    void OnLocalConnected();
+    void OnAdafruitConnected();
+    void OnLocalDisconnected();
+    void OnAdafruitDisconnected();
+    void OnLocalReceived(const QMQTT::Message &message);
+    void OnAdafruitReceived(const QMQTT::Message &message);
+    void SendControlValues();
+    void PublishMessage(QString topic, QString payload, std::unique_ptr<QMQTT::Client> &broker, bool isLocal);
+    void UpdateUI(const QMQTT::Message &message);
 
 private:
     Ui::MainWindow *ui;
 
-    QTcpServer *server;
-    QTcpSocket *socket;
-    const int port = 30000;
+    bool localConnected = false;
+    bool adafruitConnected = false;
 
-    bool clientConnected = false;
-    QString ip;
+    /*
+     * MQTT
+     */
+    std::unique_ptr<QMQTT::Client> localClient;
+    std::unique_ptr<QMQTT::Client> adafruitClient;
+    const QString mqttLocalHost{"192.168.0.18"};
+    const QString mqttLocalUser{"embarcados"};
 
-    MonitoringValues mv;
-    ControlValues cv;
+    const QString mqttAdafruitHost{"io.adafruit.com"};
+    const QString mqttAdafruitUser{"vrocha"};
+    const QString mqttAdafruitDashboard{"server-monitoring-tool"};
+
+    const quint16 mqttPort = 1883;
+
+    std::chrono::steady_clock::time_point lastSendToAdafruit;
 };
 #endif // MAINWINDOW_H

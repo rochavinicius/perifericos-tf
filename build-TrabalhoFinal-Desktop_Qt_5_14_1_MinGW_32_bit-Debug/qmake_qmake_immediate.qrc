@@ -1,0 +1,5 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+<file alias="wifi-icon.png">D:/Perifericos/perifericos-tf/Qt/wifi-icon.png</file>
+</qresource>
+</RCC>

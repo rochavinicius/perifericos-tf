@@ -14,7 +14,7 @@
    <string>Server Monitoring Tool</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../build-Trabalho04-Desktop_Qt_5_14_1_MinGW_32_bit-Debug/qmake_qmake_immediate.qrc">
+   <iconset resource="../build-TrabalhoFinal-Desktop_Qt_5_14_1_MinGW_32_bit-Debug/qmake_qmake_immediate.qrc">
     <normaloff>:/wifi-icon.png</normaloff>:/wifi-icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -198,7 +198,7 @@
       <number>12</number>
      </property>
     </widget>
-    <widget class="QLCDNumber" name="lcdUmid">
+    <widget class="QLCDNumber" name="lcdHumid">
      <property name="geometry">
       <rect>
        <x>270</x>
@@ -281,7 +281,7 @@
       </rect>
      </property>
      <property name="maximum">
-      <number>3</number>
+      <number>4</number>
      </property>
      <property name="pageStep">
       <number>1</number>
@@ -457,9 +457,9 @@
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>1030</x>
+       <x>945</x>
        <y>730</y>
-       <width>60</width>
+       <width>140</width>
        <height>18</height>
       </rect>
      </property>
@@ -476,10 +476,10 @@
       </font>
      </property>
      <property name="text">
-      <string>Status:</string>
+      <string>Local Broker Status:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="lblStatus">
+    <widget class="QLabel" name="lblLocalStatus">
      <property name="geometry">
       <rect>
        <x>1085</x>
@@ -571,11 +571,150 @@
       </property>
      </widget>
     </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>770</x>
+       <y>190</y>
+       <width>30</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Lucida Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>-90º</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>830</x>
+       <y>190</y>
+       <width>30</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Lucida Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>-45º</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>895</x>
+       <y>190</y>
+       <width>30</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Lucida Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>0º</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>950</x>
+       <y>190</y>
+       <width>30</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Lucida Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>45º</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>1010</x>
+       <y>190</y>
+       <width>30</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Lucida Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>90º</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>660</x>
+       <y>730</y>
+       <width>160</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Lucida Sans</family>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <italic>true</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+       <kerning>true</kerning>
+      </font>
+     </property>
+     <property name="text">
+      <string>Adafruit Broker Status:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblAdafruitStatus">
+     <property name="geometry">
+      <rect>
+       <x>820</x>
+       <y>730</y>
+       <width>90</width>
+       <height>18</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Lucida Sans</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Disconnected</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
  <resources>
-  <include location="../build-Trabalho04-Desktop_Qt_5_14_1_MinGW_32_bit-Debug/qmake_qmake_immediate.qrc"/>
+  <include location="../build-TrabalhoFinal-Desktop_Qt_5_14_1_MinGW_32_bit-Debug/qmake_qmake_immediate.qrc"/>
  </resources>
  <connections/>
 </ui>

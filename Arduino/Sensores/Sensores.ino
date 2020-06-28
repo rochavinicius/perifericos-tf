@@ -177,6 +177,8 @@ void moveServo() {
     pos = 2;
   else if (strcmp(cv.servoDirection, "3") == 0)
     pos = 3;
+  else if (strcmp(cv.servoDirection, "4") == 0)
+    pos = 4;
   else
     pos = 0;
 
@@ -187,10 +189,13 @@ void moveServo() {
     case 1: // -45
       servo.write(68);
       break;
-    case 2: // 45
+    case 2: // 0
+      servo.write(93);
+      break;
+    case 3: // 45
       servo.write(117);
       break;
-    case 3: // 90
+    case 4: // 90
       servo.write(180);
       break;
     default:
